@@ -14,7 +14,14 @@ print(dados_youtube.head())
 # Verificar os nomes das colunas
 print(dados_youtube.columns)
 
-# Verificação das informações das colunas e tipos de dados
+# Verificação de Tipos de Dados
+for coluna in dados_youtube.columns:
+    if dados_youtube[coluna].dtype == 'object':
+        dados_youtube[coluna] = dados_youtube[coluna].astype('category')
+    elif dados_youtube[coluna].dtype in ['int64', 'float64']:
+        dados_youtube[coluna] = dados_youtube[coluna].astype(float)
+
+# Verificação das informações das colunas
 print(dados_youtube.info())
 
 # Resumo estatístico das variáveis numéricas
@@ -64,7 +71,24 @@ outliers = (z_scores > 3).sum(axis=1)
 print("\nNúmero de outliers em cada linha:")
 print(outliers)
 
+# Boxplot para identificar outliers
+plt.figure(figsize=(12, 6))
+sns.boxplot(data=dados_youtube.select_dtypes(include=[float]), orient='h')
+plt.title('Boxplot das Variáveis Numéricas')
+plt.show()
+
 # Removendo outliers
 df_clean = dados_youtube[(z_scores < 3).all(axis=1)]
 print("\nDataFrame após remoção de outliers:")
 print(df_clean.describe())
+
+# Análise de Correlação
+# Selecionando colunas numericas  e calculando a correlação
+numeric_data = dados_youtube.select_dtypes(include=[float, int])
+correlacao = numeric_data.corr()
+
+# Mapa de calor da correlação
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlacao, annot=True, cmap='coolwarm', center=0)
+plt.title('Mapa de Calor da Correlação')
+plt.show()
