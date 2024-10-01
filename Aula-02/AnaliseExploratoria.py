@@ -30,6 +30,7 @@ print(dados_youtube.describe())
 # Visualizações gráficas 
 plt.figure(figsize=(14, 6))
 dados_youtube.hist(bins=30, figsize=(20,15))
+plt.suptitle('Histogramas das Variáveis Numéricas')
 plt.show()
 
 # Histograma das visualizações
